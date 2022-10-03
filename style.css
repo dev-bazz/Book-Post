@@ -1,0 +1,18 @@
+.main-container {
+  max-width: 1120px;
+  margin: auto !important;
+}
+
+.success, .error {
+  color: white;
+  padding: 5px;
+  margin-block: 5px 15px;
+}
+
+.success {
+  background-color: green;
+}
+
+.error {
+  background-color: red;
+}/*# sourceMappingURL=style.css.map */
