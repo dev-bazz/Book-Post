@@ -16,15 +16,15 @@
                         <form id="book-form">
                                 <div class="form-container">
                                         <label for="title">Title</label>
-                                        <input type="text" aria-label="Title Input" id="title" class="u-full-width" required>
+                                        <input type="text" aria-label="Title Input" id="title" class="u-full-width" >
                                 </div>
                                 <div class="form-container">
                                         <label for="author">Author</label>
-                                        <input type="text" aria-label="author Input" id="author"class ="u-full-width" required>
+                                        <input type="text" aria-label="author Input" id="author"class ="u-full-width" >
                                 </div>
                                 <div class="form-container">
                                         <label for="ismb">ISMB</label>
-                                        <input type="text" aria-label="ismb Input" id="ismb" class="u-full-width" required>
+                                        <input type="text" aria-label="ismb Input" id="ismb" class="u-full-width" >
                                 </div>
                                 <div>
                                         <input type="submit" value="submit" class="form-cta  [ u-full-width ]">
@@ -50,11 +50,16 @@
         <!-- Template for Javascript -->
         <template id="temp-row">
                 <tr class="temp-tr">
-                         <td class="temp-td temp-title">1</td>
-                         <td class="temp-td temp-author">2</td>
-                         <td class="temp-td temp-ismb">3</td>
-                         <td class="temp-ta "> <a href="#" class="delete">X</a></td>
+                        <td class="temp-td temp-title">1</td>
+                        <td class="temp-td temp-author">2</td>
+                        <td class="temp-td temp-ismb">3</td>
+                        <td class="temp-ta "> <a href="#" class="delete">X</a></td>
                 </tr>
+        </template>
+        <template class="alert">
+                <div class="alert-body">
+                        <p class="message"></p>
+                </div>
         </template>
         
 </body>

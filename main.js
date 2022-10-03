@@ -23,21 +23,46 @@ UI.prototype.clearField = function (...ui) {
         xi.value = '';
     }
 };
+UI.prototype.showAlert = function (message, eClass) {
+    var _a, _b;
+    const alertContent = alertMe.content;
+    //coping html template
+    const copyAlertCOntent = document.importNode(alertContent, true);
+    (_a = copyAlertCOntent.querySelector('.message')) === null || _a === void 0 ? void 0 : _a.textContent = message;
+    (_b = copyAlertCOntent.querySelector('.alert-body')) === null || _b === void 0 ? void 0 : _b.classList.add(eClass);
+    //Adding Template to the DOM
+    $container.insertBefore(copyAlertCOntent, $bookform);
+    //Remove From the DOM
+    setTimeout(() => {
+        var _a;
+        (_a = document.querySelector('.alert-body')) === null || _a === void 0 ? void 0 : _a.remove();
+    }, 3000);
+};
 // DOM Elements
 function getDOM_element(element) {
     return document.querySelector(element);
 }
 const $bookform = getDOM_element('#book-form'), $title = getDOM_element('#title'), $author = getDOM_element('#author'), $ismb = getDOM_element('#ismb'), 
 // Template VariableSet
-temp_row = getDOM_element('#temp-row'), tempRow_content = temp_row.content, $bookTables = getDOM_element('.book-table');
+temp_row = getDOM_element('#temp-row'), tempRow_content = temp_row.content, $bookTables = getDOM_element('.book-table'), alertMe = getDOM_element('.alert'), $container = getDOM_element('.container');
+console.log(temp_row, tempRow_content);
 //Events
 $bookform.addEventListener('submit', (e) => {
     //Get Form  Value
     const titleValue = $title.value, authorValue = $author.value, ismbValue = parseInt($ismb.value);
-    //intantiate 
+    //intantiate
     const book = new Book(titleValue, authorValue, ismbValue);
     const ui = new UI();
-    ui.addBookToList(book);
-    ui.clearField($title, $author, $ismb);
-    e.preventDefault();
+    // Validate Form
+    if (titleValue === '' || authorValue === '' || ismbValue === undefined) {
+        ui === null || ui === void 0 ? void 0 : ui.showAlert(`You did not fill everything`, 'error');
+        e.preventDefault();
+    }
+    else {
+        ui.addBookToList(book);
+        ui.clearField($title, $author, $ismb);
+        ui.showAlert(`Nice, Book Added`, 'success');
+        e.preventDefault();
+    }
+    //intantiate 
 });

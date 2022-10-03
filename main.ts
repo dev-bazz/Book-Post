@@ -32,6 +32,25 @@ UI.prototype.clearField = function(...ui:HTMLElement[]){
                 xi.value = ''
         }
 }
+UI.prototype.showAlert = function(message:string, eClass:string){
+        const alertContent = alertMe.content
+
+        //coping html template
+        const copyAlertCOntent:DocumentFragment = document.importNode(alertContent, true)
+        copyAlertCOntent.querySelector('.message')?.textContent = message;
+        copyAlertCOntent.querySelector('.alert-body')?.classList.add(eClass)
+
+
+        //Adding Template to the DOM
+        $container.insertBefore(copyAlertCOntent, $bookform);
+
+
+        //Remove From the DOM
+        setTimeout(()=>{
+        document.querySelector('.alert-body')?.remove()
+        }, 3000)
+
+}
 
 
 // DOM Elements
@@ -46,7 +65,10 @@ const $bookform = getDOM_element('#book-form') as HTMLFormElement,
         // Template VariableSet
         temp_row = getDOM_element('#temp-row') as HTMLTemplateElement,
         tempRow_content = temp_row.content,
-        $bookTables = getDOM_element('.book-table');
+        $bookTables = getDOM_element('.book-table'),
+        alertMe = getDOM_element('.alert') as HTMLTemplateElement,
+        $container = getDOM_element('.container') as HTMLDivElement;
+        console.log(temp_row, tempRow_content)
 
 //Events
 $bookform.addEventListener('submit', (e)=>{
@@ -54,17 +76,27 @@ $bookform.addEventListener('submit', (e)=>{
         const titleValue:string = $title.value,
         authorValue:string = $author.value,
         ismbValue:number = parseInt($ismb.value)  ;
-        
+
+        //intantiate
+        const book = new Book(titleValue, authorValue, ismbValue);
+        const ui = new UI()
+
+        // Validate Form
+        if(titleValue === '' || authorValue === '' || ismbValue === undefined){
+                ui?.showAlert(`You did not fill everything`, 'error')
+                e.preventDefault()
+
+
+        }else{
+        ui.addBookToList(book)
+        ui.clearField($title,$author,$ismb)
+        ui.showAlert(`Nice, Book Added`,'success')
+        e.preventDefault()
+        }
         
         
 
         //intantiate 
-        const book = new Book(titleValue, authorValue, ismbValue);
-        const ui = new UI()
 
         
-        ui.addBookToList(book)
-        ui.clearField($title,$author,$ismb)
-        
-        e.preventDefault()
 })
