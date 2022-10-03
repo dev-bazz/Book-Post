@@ -38,6 +38,12 @@ UI.prototype.showAlert = function (message, eClass) {
         (_a = document.querySelector('.alert-body')) === null || _a === void 0 ? void 0 : _a.remove();
     }, 3000);
 };
+UI.prototype.delete = function (target) {
+    if (target.classList.contains('delete')) {
+        console.log('deleted');
+        target.parentElement.parentElement.remove();
+    }
+};
 // DOM Elements
 function getDOM_element(element) {
     return document.querySelector(element);
@@ -45,7 +51,6 @@ function getDOM_element(element) {
 const $bookform = getDOM_element('#book-form'), $title = getDOM_element('#title'), $author = getDOM_element('#author'), $ismb = getDOM_element('#ismb'), 
 // Template VariableSet
 temp_row = getDOM_element('#temp-row'), tempRow_content = temp_row.content, $bookTables = getDOM_element('.book-table'), alertMe = getDOM_element('.alert'), $container = getDOM_element('.container');
-console.log(temp_row, tempRow_content);
 //Events
 $bookform.addEventListener('submit', (e) => {
     //Get Form  Value
@@ -65,4 +70,11 @@ $bookform.addEventListener('submit', (e) => {
         e.preventDefault();
     }
     //intantiate 
+});
+// Delecting a Book
+$bookTables === null || $bookTables === void 0 ? void 0 : $bookTables.addEventListener('click', (e) => {
+    const ui = new UI();
+    ui.delete(e.target);
+    e.target.classList.contains('delete') && ui.showAlert(`Deleted Successfully`, `success`);
+    e.preventDefault();
 });

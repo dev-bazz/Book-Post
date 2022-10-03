@@ -23,7 +23,8 @@ UI.prototype.addBookToList = function(book:iBook){
         templateCopy.querySelector('.temp-title')?.textContent = book.title;
         templateCopy.querySelector('.temp-author')?.textContent = book.author;
         templateCopy.querySelector('.temp-ismb')?.textContent = book.ismb;
-        $bookTables?.appendChild(templateCopy)
+        $bookTables?.appendChild(templateCopy);
+
 
 
 }
@@ -52,6 +53,13 @@ UI.prototype.showAlert = function(message:string, eClass:string){
 
 }
 
+UI.prototype.delete = function(target:any){
+        if(target.classList.contains('delete')){
+                console.log('deleted')
+                target.parentElement.parentElement.remove()
+        } 
+}
+
 
 // DOM Elements
 
@@ -68,7 +76,7 @@ const $bookform = getDOM_element('#book-form') as HTMLFormElement,
         $bookTables = getDOM_element('.book-table'),
         alertMe = getDOM_element('.alert') as HTMLTemplateElement,
         $container = getDOM_element('.container') as HTMLDivElement;
-        console.log(temp_row, tempRow_content)
+        
 
 //Events
 $bookform.addEventListener('submit', (e)=>{
@@ -99,4 +107,11 @@ $bookform.addEventListener('submit', (e)=>{
         //intantiate 
 
         
+});
+// Delecting a Book
+$bookTables?.addEventListener('click', (e:{})=>{
+        const ui = new UI();
+        ui.delete(e.target);
+        e.target.classList.contains('delete') && ui.showAlert(`Deleted Successfully`, `success`)
+        e.preventDefault();
 })
