@@ -69,6 +69,7 @@ $book_form.addEventListener('submit', (e) => {
     }
     else {
         uiBuilder.addBookToUI(book);
+        uiBuilder.showAlert('Book Added', 'success');
         uiBuilder.clearField($tittleElement, $authorElement, $ismbElement);
     }
     e.preventDefault();
