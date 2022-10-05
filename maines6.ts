@@ -74,6 +74,13 @@ class uiBuilder{
         }
 
         static delete(target:any){
+                if (target.classList.contains('delete')){
+                        console.log(`${target} was deleted`)
+                        uiBuilder.showAlert('Deleted ','success')
+                        target.parentElement?.parentElement?.remove();
+
+                } 
+                return console.log('failed to delete')
 
         }
 }
@@ -94,7 +101,9 @@ $container_element = getDOMelement.singleDOMElement('.container') as HTMLDivElem
 
 console.log($tittleElement)
 
-// Events
+// # Events
+
+// ## Adding a Book
 $book_form.addEventListener('submit',(e)=>{
 // Get the value from the form
         const title:string = $tittleElement.value,
@@ -116,4 +125,12 @@ $book_form.addEventListener('submit',(e)=>{
         
         
         e.preventDefault()
+});
+
+// ## Delecting a Book
+
+$book_tables?.addEventListener("click", (e)=>{
+        console.log(e.target)
+        uiBuilder.delete(e.target)
+
 })

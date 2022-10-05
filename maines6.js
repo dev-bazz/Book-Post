@@ -51,13 +51,21 @@ class uiBuilder {
         }, 2000);
     }
     static delete(target) {
+        var _a, _b;
+        if (target.classList.contains('delete')) {
+            console.log(`${target} was deleted`);
+            uiBuilder.showAlert('Deleted ', 'success');
+            (_b = (_a = target.parentElement) === null || _a === void 0 ? void 0 : _a.parentElement) === null || _b === void 0 ? void 0 : _b.remove();
+        }
+        return console.log('failed to delete');
     }
 }
 const $book_form = getDOMelement.singleDOMElement('#book-form'), $tittleElement = getDOMelement.singleDOMElement('#title'), $authorElement = getDOMelement.singleDOMElement('#author'), $ismbElement = getDOMelement.singleDOMElement('#ismb'), 
 // Template element
 $temp_row = getDOMelement.singleDOMElement('#temp-row'), $tempRow_content = $temp_row.content, $book_tables = getDOMelement.singleDOMElement('.book-table'), $alertMe = getDOMelement.singleDOMElement('.alert'), $container_element = getDOMelement.singleDOMElement('.container'); //?
 console.log($tittleElement);
-// Events
+// # Events
+// ## Adding a Book
 $book_form.addEventListener('submit', (e) => {
     // Get the value from the form
     const title = $tittleElement.value, author = $authorElement.value, ismb = parseInt($ismbElement.value);
@@ -73,4 +81,9 @@ $book_form.addEventListener('submit', (e) => {
         uiBuilder.clearField($tittleElement, $authorElement, $ismbElement);
     }
     e.preventDefault();
+});
+// ## Delecting a Book
+$book_tables === null || $book_tables === void 0 ? void 0 : $book_tables.addEventListener("click", (e) => {
+    console.log(e.target);
+    uiBuilder.delete(e.target);
 });
