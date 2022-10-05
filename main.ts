@@ -24,9 +24,6 @@ UI.prototype.addBookToList = function(book:iBook){
         templateCopy.querySelector('.temp-author')?.textContent = book.author;
         templateCopy.querySelector('.temp-ismb')?.textContent = book.ismb;
         $bookTables?.appendChild(templateCopy);
-
-
-
 }
 UI.prototype.clearField = function(...ui:HTMLElement[]){
         for (let xi of ui) {
@@ -78,7 +75,9 @@ const $bookform = getDOM_element('#book-form') as HTMLFormElement,
         $container = getDOM_element('.container') as HTMLDivElement;
         
 
-//Events
+// # Events
+
+// ## Adding Books
 $bookform.addEventListener('submit', (e)=>{
         //Get Form  Value
         const titleValue:string = $title.value,
@@ -101,14 +100,9 @@ $bookform.addEventListener('submit', (e)=>{
         ui.showAlert(`Nice, Book Added`,'success')
         e.preventDefault()
         }
-        
-        
-
-        //intantiate 
-
-        
 });
-// Delecting a Book
+
+// ## Delecting a Book
 $bookTables?.addEventListener('click', (e:{})=>{
         const ui = new UI();
         ui.delete(e.target);

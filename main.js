@@ -51,7 +51,8 @@ function getDOM_element(element) {
 const $bookform = getDOM_element('#book-form'), $title = getDOM_element('#title'), $author = getDOM_element('#author'), $ismb = getDOM_element('#ismb'), 
 // Template VariableSet
 temp_row = getDOM_element('#temp-row'), tempRow_content = temp_row.content, $bookTables = getDOM_element('.book-table'), alertMe = getDOM_element('.alert'), $container = getDOM_element('.container');
-//Events
+// # Events
+// ## Adding Books
 $bookform.addEventListener('submit', (e) => {
     //Get Form  Value
     const titleValue = $title.value, authorValue = $author.value, ismbValue = parseInt($ismb.value);
@@ -69,9 +70,8 @@ $bookform.addEventListener('submit', (e) => {
         ui.showAlert(`Nice, Book Added`, 'success');
         e.preventDefault();
     }
-    //intantiate 
 });
-// Delecting a Book
+// ## Delecting a Book
 $bookTables === null || $bookTables === void 0 ? void 0 : $bookTables.addEventListener('click', (e) => {
     const ui = new UI();
     ui.delete(e.target);
