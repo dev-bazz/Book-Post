@@ -16,12 +16,43 @@ class getDOMelement {
         return document.querySelectorAll(elementSelector);
     }
 }
-class uiBuilder {
-    static con(...values) {
-        return console.log(values);
+class Store {
+    static getLocalStorage() {
+        let books;
+        if (localStorage.getItem('books') === null) {
+            books = [];
+        }
+        else {
+            const x = localStorage.getItem('book');
+            books = JSON.parse(localStorage.getItem('books') || '{}');
+        }
+        return books;
     }
+    static addToLocalStorage(book) {
+        const books = Store.getLocalStorage();
+        books.push(book);
+        localStorage.setItem('books', JSON.stringify(books));
+    }
+    static removeFromLocalStorage(target) {
+        const books = Store.getLocalStorage();
+        books.forEach((book, index) => {
+            if (book.ismb == target) {
+                books.splice(index, 1);
+                console.log(book);
+            }
+            console.log(book.ismb);
+        });
+        localStorage.setItem('books', JSON.stringify(books));
+    }
+    static displayFromLocalStorage() {
+        const books = Store.getLocalStorage();
+        books.forEach((x) => {
+            uiBuilder.addBookToUI(x);
+        });
+    }
+}
+class uiBuilder {
     static addBookToUI(book) {
-        console.group('Add Book to UI');
         const copyTemplate = document.importNode($tempRow_content, true);
         // manipulate copyTemplate
         copyTemplate.querySelector('.temp-title').textContent = book.title;
@@ -33,11 +64,9 @@ class uiBuilder {
     static clearField(...ui) {
         for (let x of ui) {
             x.value = '';
-            console.log(x, 'clear');
         }
     }
     static showAlert(message, eClass) {
-        console.log('Show Alert');
         const copyTemplate = document.importNode($alertMe.content, true);
         //Template manipulation
         copyTemplate.querySelector('.message').textContent = message;
@@ -53,11 +82,9 @@ class uiBuilder {
     static delete(target) {
         var _a, _b;
         if (target.classList.contains('delete')) {
-            console.log(`${target} was deleted`);
             uiBuilder.showAlert('Deleted ', 'success');
             (_b = (_a = target.parentElement) === null || _a === void 0 ? void 0 : _a.parentElement) === null || _b === void 0 ? void 0 : _b.remove();
         }
-        return console.log('failed to delete');
     }
 }
 const $book_form = getDOMelement.singleDOMElement('#book-form'), $tittleElement = getDOMelement.singleDOMElement('#title'), $authorElement = getDOMelement.singleDOMElement('#author'), $ismbElement = getDOMelement.singleDOMElement('#ismb'), 
@@ -65,6 +92,10 @@ const $book_form = getDOMelement.singleDOMElement('#book-form'), $tittleElement 
 $temp_row = getDOMelement.singleDOMElement('#temp-row'), $tempRow_content = $temp_row.content, $book_tables = getDOMelement.singleDOMElement('.book-table'), $alertMe = getDOMelement.singleDOMElement('.alert'), $container_element = getDOMelement.singleDOMElement('.container'); //?
 console.log($tittleElement);
 // # Events
+//# Dom Event
+document.addEventListener('DOMContentLoaded', () => {
+    Store.displayFromLocalStorage();
+});
 // ## Adding a Book
 $book_form.addEventListener('submit', (e) => {
     // Get the value from the form
@@ -72,18 +103,21 @@ $book_form.addEventListener('submit', (e) => {
     // intantiate
     const book = new e_book(title, author, ismb);
     //Form Validation
-    if (title === '' || author === '' || ismb === NaN) {
+    if (title === '' || author === '' || ismb === undefined) {
         uiBuilder.showAlert('Please Fill all filleds', 'error');
     }
     else {
+        console.log('book before adding', book);
         uiBuilder.addBookToUI(book);
         uiBuilder.showAlert('Book Added', 'success');
+        Store.addToLocalStorage(book);
         uiBuilder.clearField($tittleElement, $authorElement, $ismbElement);
     }
     e.preventDefault();
 });
 // ## Delecting a Book
 $book_tables === null || $book_tables === void 0 ? void 0 : $book_tables.addEventListener("click", (e) => {
-    console.log(e.target);
+    // console.log(e.target.parentElement.previousElementSibling.textContent)
+    Store.removeFromLocalStorage(parseInt(e.target.parentElement.previousElementSibling.textContent));
     uiBuilder.delete(e.target);
 });

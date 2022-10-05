@@ -28,13 +28,59 @@ class getDOMelement {
 
 }
 
+class Store{
+        static getLocalStorage(){
+                let books:any;
+                
+                if(localStorage.getItem('books') === null){
+                        books = []
+                        
+                } else{
+                        const x:any = localStorage.getItem('book');
+                        
+                        books = JSON.parse(localStorage.getItem('books') ||'{}')
+                
+                }
+                
+                return books
+        }
+        static addToLocalStorage(book:any){
+                
+                const books = Store.getLocalStorage()
+                books.push(book)
+                localStorage.setItem('books', JSON.stringify(books))
+
+
+        }
+        static removeFromLocalStorage(target: number) {
+
+                const books = Store.getLocalStorage()
+                books.forEach((book:any, index:any)=>{
+                        if (book.ismb == target){
+                                books.splice(index,1)
+                                console.log(book)
+                        }
+                        console.log(book.ismb)
+                })
+
+                localStorage.setItem('books', JSON.stringify(books))
+
+
+        }
+        static displayFromLocalStorage(){
+                const books = Store.getLocalStorage()
+                books.forEach( (x:any) => {
+                        uiBuilder.addBookToUI(x)
+                });
+
+        }
+}
+
 
 class uiBuilder{
-        static con (...values:any){
-                return console.log(values)
-        }
+        
         static addBookToUI(book:iBook){
-                console.group('Add Book to UI')
+                
                 const copyTemplate:null| any = document.importNode($tempRow_content, true) ;
 
                 // manipulate copyTemplate
@@ -50,12 +96,12 @@ class uiBuilder{
         static clearField(...ui:HTMLInputElement[]){
                 for (let x of ui){
                         x.value = ''
-                        console.log(x, 'clear')
+                        
                 }
 
         }
         static showAlert(message:string, eClass:string){
-                console.log('Show Alert')
+                
                 const copyTemplate:null | any = document.importNode($alertMe.content, true);
 
                 //Template manipulation
@@ -75,12 +121,12 @@ class uiBuilder{
 
         static delete(target:any){
                 if (target.classList.contains('delete')){
-                        console.log(`${target} was deleted`)
+                        
                         uiBuilder.showAlert('Deleted ','success')
                         target.parentElement?.parentElement?.remove();
 
                 } 
-                return console.log('failed to delete')
+                
 
         }
 }
@@ -103,6 +149,11 @@ console.log($tittleElement)
 
 // # Events
 
+//# Dom Event
+document.addEventListener('DOMContentLoaded',()=>{
+        Store.displayFromLocalStorage()
+})
+
 // ## Adding a Book
 $book_form.addEventListener('submit',(e)=>{
 // Get the value from the form
@@ -112,14 +163,17 @@ $book_form.addEventListener('submit',(e)=>{
 
         // intantiate
         const book = new e_book(title, author,ismb);
+        
 
         //Form Validation
-        if(title === '' || author === '' || ismb === NaN){
+        if(title === '' || author === '' || ismb === undefined){
                 uiBuilder.showAlert('Please Fill all filleds', 'error')
         }
         else{
+                console.log('book before adding', book);
                 uiBuilder.addBookToUI(book);
                 uiBuilder.showAlert('Book Added', 'success')
+                Store.addToLocalStorage(book);
                 uiBuilder.clearField($tittleElement, $authorElement, $ismbElement)
         }
         
@@ -129,8 +183,9 @@ $book_form.addEventListener('submit',(e)=>{
 
 // ## Delecting a Book
 
-$book_tables?.addEventListener("click", (e)=>{
-        console.log(e.target)
+$book_tables?.addEventListener("click", (e:any | HTMLElement | EventListenerObject)=>{
+        // console.log(e.target.parentElement.previousElementSibling.textContent)
+        Store.removeFromLocalStorage(parseInt(e.target.parentElement.previousElementSibling.textContent))
         uiBuilder.delete(e.target)
 
 })
